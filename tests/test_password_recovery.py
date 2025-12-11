@@ -2,6 +2,9 @@ from page_objects.home_page import HomePageBurger
 from page_objects.login_page import LoginPageBurger
 from page_objects.forgot_password_page import ForgotPasswordPageBurger
 from page_objects.reset_password_page import ResetPasswordPageBurger
+import locators.forgot_password_page_locators
+import locators.reset_password_page_lpcators
+import urls
 import allure
 
 
@@ -16,7 +19,8 @@ class TestPasswordRecovery:
         login_page = LoginPageBurger(driver)
         login_page.click_recovery_password_link()
         forgot_password_page = ForgotPasswordPageBurger(driver)
-        forgot_password_page.check_current_url()
+        current_url = forgot_password_page.get_current_url()
+        assert current_url == urls.BASE_URL + "/" + urls.FORGOT_PASSWORD_ENDPOINT
 
     @allure.title('Проверка ввода email и клика по кнопке "Восстановить"')
     @allure.description('После ввода email и клика на кнопку "Восстановить", происходит переход на страницу, '
@@ -31,7 +35,8 @@ class TestPasswordRecovery:
         forgot_password_page.click_recovery_button()
         forgot_password_page.wait_redirect()
         reset_password_page = ResetPasswordPageBurger(driver)
-        reset_password_page.check_current_url()
+        current_url = reset_password_page.get_current_url()
+        assert current_url == urls.BASE_URL + "/" + urls.RESET_PASSWORD_ENDPOINT
 
     @allure.title('Проверка клика на кнопку "Показать/скрыть пароль"')
     @allure.description('При клике на кнопку "Показать/скрыть пароль" поле Пароль становится активным')
@@ -46,4 +51,5 @@ class TestPasswordRecovery:
         forgot_password_page.wait_redirect()
         reset_password_page = ResetPasswordPageBurger(driver)
         reset_password_page.click_show_hide_button()
-        reset_password_page.check_reset_password_field_is_active()
+        reset_password_field = reset_password_page.wait_and_find_element(locators.reset_password_page_lpcators.RESET_PASSWORD_FIELD)
+        assert 'input_status_active' in reset_password_field.get_attribute('class')

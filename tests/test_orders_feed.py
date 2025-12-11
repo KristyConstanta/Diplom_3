@@ -3,7 +3,7 @@ from page_objects.login_page import LoginPageBurger
 from page_objects.orders_feed_page import OrderFeedPageBurger
 from page_objects.account_page import AccountPageBurger
 import allure
-
+import locators.orders_feed_page_locators
 
 class TestOrdersFeed:
 
@@ -15,7 +15,8 @@ class TestOrdersFeed:
         home_page.click_order_feed_button()
         order_feed_page = OrderFeedPageBurger(driver)
         order_feed_page.click_order_in_feed()
-        order_feed_page.check_window_with_order_info_is_appear()
+        window = order_feed_page.wait_and_find_element(locators.orders_feed_page_locators.WINDOW_WITH_INFO)
+        assert window.is_displayed()
 
     @allure.title('Проверка, что заказы пользователя из "Истории заказов" отображаются на странице "Лента заказов"')
     @allure.description('Номер заказа пользователя, который отображается в разделе "История заказов" в личном '
@@ -34,7 +35,7 @@ class TestOrdersFeed:
         account_page.click_orders_history_button()
         order_number = account_page.get_order_number_from_history()
         order_feed_page = OrderFeedPageBurger(driver)
-        order_feed_page.check_order_number_in_feed(order_number)
+        assert order_feed_page.get_last_order_number_from_feed() == order_number
 
     @allure.title('Проверка,  что при создании нового заказа счётчик "Выполнено за всё время" увеличивается')
     @allure.description('Показатель счетчика "Выполнено за всё время" на странице Лента заказов до оформления заказа '
@@ -55,7 +56,8 @@ class TestOrdersFeed:
         home_page.click_window_order_close_button()
         home_page.wait_home_page_loading()
         home_page.click_order_feed_button()
-        order_feed_page.check_counter_all_orders_is_increased(order_count)
+        new_order_count = order_feed_page.get_counter_all_orders()
+        assert new_order_count > order_count
 
     @allure.title('Проверка,  что при создании нового заказа счётчик "Выполнено за сегодня" увеличивается')
     @allure.description('Показатель счетчика "Выполнено за сегодня" на странице Лента заказов до оформления заказа '
@@ -76,7 +78,8 @@ class TestOrdersFeed:
         home_page.click_window_order_close_button()
         home_page.wait_home_page_loading()
         home_page.click_order_feed_button()
-        order_feed_page.check_counter_today_orders_is_increased(order_count)
+        new_order_count = order_feed_page.get_counter_today_orders()
+        assert new_order_count > order_count
 
     @allure.title('Проверка, что после оформления заказа его номер появляется в разделе "В работе"')
     @allure.description('Номер нового заказа пользователя отображается в разделе "В работе" на странице "Лента '
@@ -86,4 +89,4 @@ class TestOrdersFeed:
         home_page.click_order_feed_button()
         order_feed_page = OrderFeedPageBurger(driver)
         order_number = create_order['order_number']
-        order_feed_page.check_order_number_in_order_in_work(order_number)
+        assert order_feed_page.get_number_of_order_in_work() == order_number

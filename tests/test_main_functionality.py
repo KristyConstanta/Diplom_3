@@ -2,6 +2,8 @@ from page_objects.home_page import HomePageBurger
 from page_objects.login_page import LoginPageBurger
 from page_objects.orders_feed_page import OrderFeedPageBurger
 import allure
+import urls
+import locators.home_page_locators
 
 
 class TestMainFunctionality:
@@ -12,7 +14,8 @@ class TestMainFunctionality:
         home_page = HomePageBurger(driver)
         home_page.click_order_feed_button()
         order_feed_page = OrderFeedPageBurger(driver)
-        order_feed_page.check_current_url()
+        current_url = order_feed_page.get_current_url()
+        assert current_url == urls.BASE_URL + "/" + urls.FEED_ENDPOINT
 
     @allure.title('Проверка перехода по клику на "Конструктор"')
     @allure.description('При клике на кнопку "Конструктор" происходит переход на главную страницу')
@@ -21,14 +24,16 @@ class TestMainFunctionality:
         home_page.click_order_feed_button()
         order_feed_page = OrderFeedPageBurger(driver)
         order_feed_page.click_construct_button()
-        home_page.check_current_url()
+        current_url = home_page.get_current_url()
+        assert current_url == urls.BASE_URL
 
     @allure.title('Проверка появления вслывающего окна с деталями при клике на ингредиент')
     @allure.description('При клике на ингредиент появляется вслывающее окно с информацией об ингредиенте')
     def test_click_ingredient_window_is_appear(self, driver):
         home_page = HomePageBurger(driver)
         home_page.click_ingredient()
-        home_page.check_window_with_ingredient_detail_is_appear()
+        title = home_page.wait_and_find_element(locators.home_page_locators.WINDOW_WITH_DETAILS_TITLE)
+        assert title.is_displayed()
 
     @allure.title('Проверка закрытия вслывающего окна с деталями при клике по крестику ')
     @allure.description('При клике на иконку с крестиком в правом вехнем углу окна окно закрывается')
@@ -36,14 +41,16 @@ class TestMainFunctionality:
         home_page = HomePageBurger(driver)
         home_page.click_ingredient()
         home_page.click_window_with_detail_close_button()
-        home_page.check_window_with_ingredient_detail_is_disappear()
+        title = home_page.wait_element_invisible(locators.home_page_locators.WINDOW_WITH_DETAILS_TITLE)
+        assert not title.is_displayed()
 
     @allure.title('Проверка увеличения показателя счетчика ингредиента после добавлении ингредиента в заказ')
     @allure.description('После перемещения ингредента в корзину-конструктор значение его счетчика увеличивыется')
     def test_add_ingredient_in_order_counter_is_increased(self, driver):
         home_page = HomePageBurger(driver)
         home_page.move_ingredient_to_order()
-        home_page.check_ingredient_counter_is_increased()
+        counter = home_page.wait_and_find_element(locators.home_page_locators.INGREDIENT_COUNTER)
+        assert int(counter.text) > 0
 
     @allure.title('Проверка успешности оформления заказа авторизованным пользователем')
     @allure.description('Авторизованный пользователсь оформляет заказ, после чего появляется всплывающее окно '
@@ -58,4 +65,6 @@ class TestMainFunctionality:
         home_page.wait_home_page_loading()
         home_page.move_ingredient_to_order()
         home_page.click_order_button()
-        home_page.check_order_window_is_appear()
+        title = home_page.wait_and_find_element(locators.home_page_locators.WINDOW_ORDER_TITLE)
+        num = home_page.wait_and_find_element(locators.home_page_locators.WINDOW_ORDER_NUMBER)
+        assert title.is_displayed() and num.text is not None

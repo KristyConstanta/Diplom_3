@@ -18,7 +18,7 @@ class AccountPageBurger(BasePageBurger):
     @allure.step('Клик на кнопку "Выход" в личном кабинете')
     def click_logout_button(self):
         logout_button = self.wait_and_find_element(locators.account_page_locators.LOGOUT_BUTTON)
-        self.driver.execute_script("arguments[0].click();", logout_button)
+        logout_button.click()
 
     @allure.step('Получение номера заказа пользователя из раздела "История заказов"')
     def get_order_number_from_history(self):

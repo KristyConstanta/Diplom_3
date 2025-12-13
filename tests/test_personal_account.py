@@ -15,7 +15,7 @@ class TestPersonalAccount:
         home_page.click_lk_button()
         login_page = LoginPageBurger(driver)
         current_url = login_page.get_current_url()
-        assert current_url == urls.BASE_URL + "/" + urls.LOGIN_ENDPOINT
+        assert current_url == urls.BASE_URL + urls.LOGIN_ENDPOINT
 
     @allure.title('Проверка перехода в раздел "История заказов"')
     @allure.description('При клике на кнопку "История заказов" в личном кабинете происходит переход в раздел '
@@ -32,7 +32,7 @@ class TestPersonalAccount:
         account_page = AccountPageBurger(driver)
         account_page.click_orders_history_button()
         current_url = account_page.get_current_url()
-        assert current_url == urls.BASE_URL + "/" + urls.ORDER_HISTORY_ENDPOINT
+        assert current_url == urls.BASE_URL + urls.ORDER_HISTORY_ENDPOINT
 
     @allure.title('Проверка выхода пользователя из аккаунта')
     @allure.description('При клике на кнопку "Выход" в личном кабинете происходит выход из аккаунта и переход на '
@@ -50,4 +50,4 @@ class TestPersonalAccount:
         account_page.click_logout_button()
         account_page.wait_redirect()
         current_url = login_page.get_current_url()
-        assert current_url == urls.BASE_URL + "/" + urls.LOGIN_ENDPOINT
+        assert current_url == urls.BASE_URL + urls.LOGIN_ENDPOINT

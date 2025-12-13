@@ -13,7 +13,6 @@ class ResetPasswordPageBurger(BasePageBurger):
     @allure.step('Проверка, что клик на кнопку Показать/скрыть пароль делает поле ввода пароля активным')
     def check_reset_password_field_is_active(self):
         reset_password_field = self.wait_and_find_element(locators.reset_password_page_lpcators.RESET_PASSWORD_FIELD)
-
         assert 'input_status_active' in reset_password_field.get_attribute('class')
 
     @allure.step('Проверка, что текущая сраница это страница установки нового пароля в процессе его восстановления')

@@ -15,7 +15,7 @@ class TestMainFunctionality:
         home_page.click_order_feed_button()
         order_feed_page = OrderFeedPageBurger(driver)
         current_url = order_feed_page.get_current_url()
-        assert current_url == urls.BASE_URL + "/" + urls.FEED_ENDPOINT
+        assert current_url == urls.BASE_URL + urls.FEED_ENDPOINT
 
     @allure.title('Проверка перехода по клику на "Конструктор"')
     @allure.description('При клике на кнопку "Конструктор" происходит переход на главную страницу')
@@ -25,7 +25,7 @@ class TestMainFunctionality:
         order_feed_page = OrderFeedPageBurger(driver)
         order_feed_page.click_construct_button()
         current_url = home_page.get_current_url()
-        assert current_url == urls.BASE_URL
+        assert current_url == urls.BASE_URL + "/"
 
     @allure.title('Проверка появления вслывающего окна с деталями при клике на ингредиент')
     @allure.description('При клике на ингредиент появляется вслывающее окно с информацией об ингредиенте')

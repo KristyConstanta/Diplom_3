@@ -48,24 +48,20 @@ class OrderFeedPageBurger(BasePageBurger):
     @allure.step('Проверка, что всплывающее окно с деталями заказа появляется')
     def check_window_with_order_info_is_appear(self):
         window = self.wait_and_find_element(locators.orders_feed_page_locators.WINDOW_WITH_INFO)
-
         assert window.is_displayed()
 
     @allure.step('Проверка, что номер заказа из раздела "История заказов" отображается в разделе Лента заказов')
     def check_order_number_in_feed(self, order_number_from_history):
-
         assert self.get_last_order_number_from_feed() == order_number_from_history
 
     @allure.step('Проверка, что при создании нового заказа счётчик "Выполнено за всё время" увеличивается')
     def check_counter_all_orders_is_increased(self, order_count):
         new_order_count = self.get_counter_all_orders()
-
         assert new_order_count > order_count
 
     @allure.step('Проверка, что при создании нового заказа счётчик "Выполнено за сегодня" увеличивается')
     def check_counter_today_orders_is_increased(self, order_count):
         new_order_count = self.get_counter_today_orders()
-
         assert new_order_count > order_count
 
     @allure.step('Проверка, что после оформления заказа его номер появляется в разделе "В работе"')

@@ -20,7 +20,7 @@ class TestPasswordRecovery:
         login_page.click_recovery_password_link()
         forgot_password_page = ForgotPasswordPageBurger(driver)
         current_url = forgot_password_page.get_current_url()
-        assert current_url == urls.BASE_URL + "/" + urls.FORGOT_PASSWORD_ENDPOINT
+        assert current_url == urls.BASE_URL +  urls.FORGOT_PASSWORD_ENDPOINT
 
     @allure.title('Проверка ввода email и клика по кнопке "Восстановить"')
     @allure.description('После ввода email и клика на кнопку "Восстановить", происходит переход на страницу, '
@@ -36,7 +36,7 @@ class TestPasswordRecovery:
         forgot_password_page.wait_redirect()
         reset_password_page = ResetPasswordPageBurger(driver)
         current_url = reset_password_page.get_current_url()
-        assert current_url == urls.BASE_URL + "/" + urls.RESET_PASSWORD_ENDPOINT
+        assert current_url == urls.BASE_URL + urls.RESET_PASSWORD_ENDPOINT
 
     @allure.title('Проверка клика на кнопку "Показать/скрыть пароль"')
     @allure.description('При клике на кнопку "Показать/скрыть пароль" поле Пароль становится активным')
